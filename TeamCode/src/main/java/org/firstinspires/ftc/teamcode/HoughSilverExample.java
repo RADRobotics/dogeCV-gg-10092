@@ -63,6 +63,17 @@ public class HoughSilverExample extends OpMode
         detector.enable(); //Start the detector
     }
 
+
+
+
+
+
+
+
+
+
+
+
     /*
      * Code to run REPEATEDLY when the driver hits INIT
      */
