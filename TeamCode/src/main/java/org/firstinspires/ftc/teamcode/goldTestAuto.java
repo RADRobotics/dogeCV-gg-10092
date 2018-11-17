@@ -53,7 +53,7 @@ public class goldTestAuto extends OpMode {
     private DcMotor rightWheel;
 
 
-    double alignSize=100;
+    double alignSize=120;
     double alignX    = (640 / 2) +0; // Center point in X Pixels
     double alignXMin = alignX - (alignSize / 2); // Min X Pos in pixels
     double alignXMax = alignX +(alignSize / 2); // Max X pos in pixels
@@ -64,6 +64,9 @@ public class goldTestAuto extends OpMode {
         leftWheel = hardwareMap.dcMotor.get("leftWheel");
         rightWheel = hardwareMap.dcMotor.get("rightWheel");
         leftWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry.addData("Status", "DogeCV 2018.0 - Gold Detector test");
 
@@ -108,7 +111,7 @@ public class goldTestAuto extends OpMode {
 //        telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
 //        telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
 
-        Point screenpos = detector.getScreenPosition();
+        //Point screenpos = detector.getScreenPosition();
         Rect bestRect = detector.getFoundRect();
 
         double xPos = bestRect.x + (bestRect.width / 2);
@@ -123,15 +126,15 @@ public class goldTestAuto extends OpMode {
         telemetry.addData("xpos ",xPos);
         telemetry.addData("amax ",alignXMax);
         telemetry.addData("amin ",alignXMin);
-        telemetry.update();
+
         if(xPos>alignXMax){
-            rightWheel.setPower(.15);
-            leftWheel.setPower(-.15);
+            rightWheel.setPower(.6);
+            leftWheel.setPower(-.6);
             telemetry.addLine("turning left");
         }
         else if(xPos<alignXMin){
-            rightWheel.setPower(-.15);
-            leftWheel.setPower(.15);
+            rightWheel.setPower(-.6);
+            leftWheel.setPower(.6);
             telemetry.addLine("turning right");
         }
         else{
@@ -139,7 +142,7 @@ public class goldTestAuto extends OpMode {
             leftWheel.setPower(0);
             telemetry.addLine("found");
         }
-
+        telemetry.update();
     }
 
     /*
