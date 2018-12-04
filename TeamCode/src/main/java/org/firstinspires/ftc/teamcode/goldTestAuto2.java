@@ -59,7 +59,7 @@ public class goldTestAuto2 extends OpMode {
     private DcMotor rightArm;
 
 
-    double alignSize=60;
+    double alignSize=40;
     double alignX    = (640 / 2) +0; // Center point in X Pixels
     double alignXMin = alignX - (alignSize / 2); // Min X Pos in pixels
     double alignXMax = alignX +(alignSize / 2); // Max X pos in pixels
@@ -145,8 +145,8 @@ public class goldTestAuto2 extends OpMode {
      */
     @Override
     public void loop() {
-        rightArm.setTargetPosition((int)(.16* TICKS_PER_WHEEL_ROTATION*8));
-        leftArm.setTargetPosition((int)(.16* TICKS_PER_WHEEL_ROTATION*8));
+        rightArm.setTargetPosition((int)(.125* TICKS_PER_WHEEL_ROTATION*8));
+        leftArm.setTargetPosition((int)(.125* TICKS_PER_WHEEL_ROTATION*8));
 rightArm.setPower(.6);
 leftArm.setPower(.6);
 if(runtime.seconds()>4&& stage==-1){
@@ -196,7 +196,7 @@ if(runtime.seconds()>4&& stage==-1){
                 telemetry.addLine("found");
                 telemetry.addData("secks: ", runtime.seconds());
                 if(runtime.seconds()>.1){
-
+                    runtime.reset();
                     stage++;
                     resetDriveEncoders();
                 }
@@ -205,10 +205,14 @@ if(runtime.seconds()>4&& stage==-1){
 
         }
         else if (stage==1){
-            rightWheel.setTargetPosition(-4*TICKS_PER_WHEEL_ROTATION);
-            leftWheel.setTargetPosition(-4*TICKS_PER_WHEEL_ROTATION);
+            rightWheel.setTargetPosition(-3*TICKS_PER_WHEEL_ROTATION);
+            leftWheel.setTargetPosition(-3*TICKS_PER_WHEEL_ROTATION);
             leftWheel.setPower(.5);
             rightWheel.setPower(.5);
+            if(runtime.seconds()>5){
+                rightWheel.setPower(0);
+                leftWheel.setPower(0);
+            }
 
         }
 

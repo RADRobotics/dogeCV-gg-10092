@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -51,6 +52,7 @@ public class RobotInOneWeekend extends OpMode {
     //sets doubles for set point of arm and nitro value
     private double setpoint = 0;
     private double nitro = 0;
+    private double nitro2 = 0;
 
     //defines constants that are the multipliers applied to nitro-multipliers are based on base speed multipliers later in the program
     static final private double nitroDriveTrainMulti = 0.7;
@@ -70,6 +72,9 @@ public class RobotInOneWeekend extends OpMode {
         intake = hardwareMap.dcMotor.get("intake");
         lock1 = hardwareMap.servo.get("lock1");
         lock2 = hardwareMap.servo.get("lock2");
+
+        leftWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
         leftArmEncoder = 0;
         rightArmEncoder = 0;
         rightWheelEncoder = 0;
@@ -98,6 +103,8 @@ public class RobotInOneWeekend extends OpMode {
     public void loop() {
         //sets nitro variable to right trigger (0.7 because base wheel speed multiplier is 0.3, and 0.7+0.3=1)
         nitro = gamepad1.right_trigger * .7;
+        nitro2 = 1-gamepad2.right_trigger*.8;
+
         leftWheelEncoder = leftWheel.getCurrentPosition();
         rightWheelEncoder = rightWheel.getCurrentPosition();
         leftArmEncoder = leftArm.getCurrentPosition();
@@ -132,42 +139,58 @@ public class RobotInOneWeekend extends OpMode {
         }
 
         //changes a variable that represents the point at which the arm is set
-        if (gamepad1.dpad_up) {
-            setpoint += 10 * (nitro + 1);
-        } else if (gamepad1.dpad_down) {
-            setpoint -= 10 * (nitro + 1);
-        }
-        if (gamepad1.left_stick_button) {
-            leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            setpoint = 0;
-        }
-        if (gamepad1.right_stick_button) {
-            leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+
+
+        //arrrrrrrrrrrrrrrrrrrm
+
+        setpoint = rightArm.getCurrentPosition()+ gamepad1.left_stick_y*125*(gamepad1.right_trigger+1);
+
+
+
+//        if (gamepad1.left_stick_button) {
+//            leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            setpoint = 0;
+//        }
+//        if (gamepad1.right_stick_button) {
+//            leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        }
 
         //sets speed at which the arm moves and actually sets the arm's position
-        rightArm.setPower(.6 + (nitro * nitroArmMulti));
-        leftArm.setPower(.6 + (nitro * nitroArmMulti));
+        rightArm.setPower(.6 + nitro*.6);
+        leftArm.setPower(.6 + nitro*.6);
         rightArm.setTargetPosition((int) setpoint);
         leftArm.setTargetPosition(-(int) setpoint);
 
         //shows set point of the arm for testing purposes
         telemetry.addData("setpoint", setpoint);
 
-        //creates a variable that takes the joystick positions and uses them to control drivetrain power
-        double leftWheely = -gamepad1.left_stick_y;
-        double rightWheely = gamepad1.right_stick_y;
-        //double army = -gamepad2.left_stick_y;
+//        //creates a variable that takes the joystick positions and uses them to control drivetrain power
+//        double leftWheely = -gamepad2.left_stick_y;
+//        double rightWheely = gamepad2.right_stick_y;
+//        //double army = -gamepad2.left_stick_y;
+//
+//        //sets drive train power-default 0.3 multiplier because 30% speed is good for normal play (nitro otherwise)
+//        double LeftValue =  (leftWheely*leftWheely - nitro2);
+//        if(LeftValue<0){
+//            LeftValue=0;
+//        }
+//        double RightValue =  (rightWheely*rightWheely - nitro2);
+//        if(RightValue<0){
+//            RightValue=0;
+//        }
 
-        //sets drive train power-default 0.3 multiplier because 30% speed is good for normal play (nitro otherwise)
-        leftWheel.setPower(leftWheely * (.3 + (nitro * nitroDriveTrainMulti)));
-        rightWheel.setPower(rightWheely * (.3 + (nitro * nitroDriveTrainMulti)));
+
+        leftWheel.setPower((gamepad2.left_stick_y-gamepad2.right_stick_x)*nitro2);
+        rightWheel.setPower((gamepad2.left_stick_y+gamepad2.right_stick_x)*nitro2);
+
+     //   leftWheel.setPower((leftWheely/Math.abs(leftWheely))* LeftValue);
+       // rightWheel.setPower((rightWheely/Math.abs(rightWheely))* RightValue);
         // leftArm.setPower(-army * 0.1);
         // rightArm.setPower(army * 0.1);
 
