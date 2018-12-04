@@ -31,7 +31,6 @@ public class SampleFieldAutonomous extends LinearOpMode {
 
     private enum state {TURN_TO_WALL, MOVE_TO_WALL, MOVE_AWAY_FROM_WALL, TURN_TO_DEPOT, MOVE_TO_DEPOT}
 
-    ;
 
 
     public void runOpMode() throws InterruptedException {
@@ -199,7 +198,7 @@ public class SampleFieldAutonomous extends LinearOpMode {
             if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
                 subStep += 0.5;
             }
-        } else if (subStep == state.TURN_TO_DEPOT.ordinal()) {
+        } else if (subStep == state.MOVE_TO_DEPOT.ordinal()) {
             // moves the robot forward up to the depot
             double target = 5;
 

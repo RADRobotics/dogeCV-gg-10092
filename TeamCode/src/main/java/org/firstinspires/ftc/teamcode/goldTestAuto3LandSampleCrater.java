@@ -1,32 +1,3 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode;
 
 import com.disnodeteam.dogecv.CameraViewDisplay;
@@ -45,7 +16,9 @@ import org.opencv.core.Size;
 
 @Autonomous(name="GoldTestAuto2Land", group="DogeCV")
 
-public class goldTestAuto2land extends OpMode {
+public class goldTestAuto3LandSampleCrater extends OpMode {
+
+
     boolean unlock = true;
     // Detector object
     private ElapsedTime runtime = new ElapsedTime();
@@ -63,6 +36,9 @@ public class goldTestAuto2land extends OpMode {
     double rotation = 0;
 
 
+    private double subStep;
+
+    private enum state {TURN_TO_WALL, MOVE_TO_WALL, MOVE_AWAY_FROM_WALL, TURN_TO_DEPOT, MOVE_TO_DEPOT}
 
     double alignSize=40;
     double alignX    = (640 / 2) +0; // Center point in X Pixels
@@ -90,24 +66,24 @@ public class goldTestAuto2land extends OpMode {
         lock1 = hardwareMap.servo.get("lock1");
         lock2 = hardwareMap.servo.get("lock2");
 
+        leftArm = hardwareMap.dcMotor.get("leftArm");
+        rightArm = hardwareMap.dcMotor.get("rightArm");
         leftWheel = hardwareMap.dcMotor.get("leftWheel");
         rightWheel = hardwareMap.dcMotor.get("rightWheel");
+
         leftWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-        leftArm = hardwareMap.dcMotor.get("leftArm");
-        rightArm = hardwareMap.dcMotor.get("rightArm");
-
-        leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         boolean unlock = true;
+        subStep = 0;
 
 
 
@@ -147,7 +123,7 @@ public class goldTestAuto2land extends OpMode {
 
         leftWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-telemetry.addData("bU","");
+        telemetry.addData("bU","");
         telemetry.update();
         beforeUnlock(500);
         runtime.reset();
@@ -158,6 +134,17 @@ telemetry.addData("bU","");
      */
     @Override
     public void loop() {
+
+        telemetry.addLine()
+                .addData("stage", stage)
+                .addData("subStep", subStep);
+
+        telemetry.addLine()
+                .addData("RightWheel: ", rightWheel.getCurrentPosition())
+                .addData("LeftWheel: ", leftWheel.getCurrentPosition())
+                .addData("TICKS_PER_WHEEL_ROTATION: ", TICKS_PER_WHEEL_ROTATION);
+        telemetry.update();
+
         if(stage==-4) {
 
             if (runtime.seconds()<2) {
@@ -165,16 +152,16 @@ telemetry.addData("bU","");
                 telemetry.addData("unlock","");
             }
 
-           if(runtime.seconds()>2) {
-               unfold(1925);
-               telemetry.addData("unfold","");
-           }
+            if(runtime.seconds()>2) {
+                unfold(1925);
+                telemetry.addData("unfold","");
+            }
             //thiiiiiiiiiiing
-           if(runtime.seconds()>5) {
-               stage = -3;
-               runtime.reset();
-               resetDriveEncoders();
-           }
+            if(runtime.seconds()>5) {
+                stage = -3;
+                runtime.reset();
+                resetDriveEncoders();
+            }
 
             //telemetry.update();
 
@@ -190,7 +177,7 @@ telemetry.addData("bU","");
         if(stage==-3) {
             rotation = .3;
             int targetPosition = (int) (rotation * TICKS_PER_WHEEL_ROTATION);
-   //         int delta = targetPosition - Math.abs(rightWheel.getCurrentPosition());
+            //         int delta = targetPosition - Math.abs(rightWheel.getCurrentPosition());
             //sets speed at which the wheels move and actually sets the wheels' position
             rightWheel.setTargetPosition(-targetPosition);
             leftWheel.setTargetPosition(targetPosition-(int)(0.1 * TICKS_PER_WHEEL_ROTATION));
@@ -309,33 +296,92 @@ telemetry.addData("bU","");
                 rightWheel.setPower(0);
                 leftWheel.setPower(0);
             }
-
+        stage = 2;
         }
+        if ((subStep * 2) % 2 == 1) {
+            resetDriveEncoders();
+            subStep += 0.5;
+        } else if (subStep == goldTestAuto3LandSampleCrater.state.TURN_TO_WALL.ordinal()) {
+            // turns the robot 90 degrees counter clockwise
+            double target = .75;
 
+            leftWheel.setPower(0.5);
+            rightWheel.setPower(0.5);
 
-        telemetry.addData("stage: ", stage);
-        telemetry.update();
+            leftWheel.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
+            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
 
+            telemetry.addData("delta", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
 
+            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+                subStep += 0.5;
+            }
+        }
+//
+        else if (subStep == goldTestAuto3LandSampleCrater.state.MOVE_TO_WALL.ordinal()) {
+            // moves the robot forward up against the wall
 
+            double target = 3;
 
+            leftWheel.setPower(0.5);
+            rightWheel.setPower(0.5);
 
-        //end of l00p
+            leftWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+
+            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+                subStep += 0.5;
+            }
+        } else if (subStep == goldTestAuto3LandSampleCrater.state.MOVE_AWAY_FROM_WALL.ordinal()) {
+            // moves the robot backward away from the wall
+            double target = -1;
+
+            leftWheel.setPower(0.5);
+            rightWheel.setPower(0.5);
+
+            leftWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+
+            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+                subStep += 0.5;
+
+            }
+        } else if (subStep == goldTestAuto3LandSampleCrater.state.TURN_TO_DEPOT.ordinal()) {
+            // turns the robot counter-clockwise to line up with the depot
+            double target = 1;
+
+            leftWheel.setPower(0.5);
+            rightWheel.setPower(0.5);
+
+            leftWheel.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
+            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+
+            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+                subStep += 0.5;
+            }
+        } else if (subStep == goldTestAuto3LandSampleCrater.state.MOVE_TO_DEPOT.ordinal()) {
+            // moves the robot forward up to the depot
+            double target = 5;
+
+            leftWheel.setPower(0.5);
+            rightWheel.setPower(0.5);
+
+            leftWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+
+            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+                subStep += 0.5;
+            }
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -348,7 +394,6 @@ telemetry.addData("bU","");
     public void stop() {
         detector.disable();
     }
-
     private void beforeUnlock(int point) {
 
         leftArm.setPower(-1.0);
@@ -393,18 +438,18 @@ telemetry.addData("bU","");
         leftArm.setPower(0.65);
 
         //while (setpoint < finalSetpoint) {
-            //setpoint += 3;
+        //setpoint += 3;
 
-            //sets speed at which the arm moves and actually sets the arm's position
-            rightArm.setTargetPosition((int) finalSetpoint);
-            leftArm.setTargetPosition(-(int) finalSetpoint);
+        //sets speed at which the arm moves and actually sets the arm's position
+        rightArm.setTargetPosition((int) finalSetpoint);
+        leftArm.setTargetPosition(-(int) finalSetpoint);
         //}
     }
 
     private void rotate() {
 
 
-       // telemetry.update();
+         telemetry.update();
     }
 
 }
