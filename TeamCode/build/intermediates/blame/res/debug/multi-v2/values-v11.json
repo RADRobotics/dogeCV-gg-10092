@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\abell\\StudioProjects\\dogeCV_ftc_app\\TeamCode\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
+            "outputFile": "C:\\Users\\Student\\Downloads\\dogeCV-gg-10092-master\\dogeCV-gg-10092\\TeamCode\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\abell\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\cb27edb05c8c24154c57f343185f0cf3\\res\\values-v11\\values-v11.xml",
+                    "source": "C:\\Users\\Student\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\d5bf6a8939c10bcc3a9f489675cdb084\\res\\values-v11\\values-v11.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

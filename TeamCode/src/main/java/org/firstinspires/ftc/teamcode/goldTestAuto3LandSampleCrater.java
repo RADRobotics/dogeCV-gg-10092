@@ -14,7 +14,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 
 
-@Autonomous(name="GoldTestAuto2Land", group="DogeCV")
+@Autonomous(name="GoldTestAuto3", group="DogeCV")
 
 public class goldTestAuto3LandSampleCrater extends OpMode {
 

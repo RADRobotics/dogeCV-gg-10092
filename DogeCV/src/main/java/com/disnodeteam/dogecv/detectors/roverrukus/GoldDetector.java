@@ -79,7 +79,8 @@ public class GoldDetector extends DogeCVDetector {
         // Current result
         Rect bestRect = null;
         double bestDiffrence = Double.MAX_VALUE; // MAX_VALUE since less diffrence = better
-
+        double bestY = 0;
+        Rect bestYRect = null;
         // Loop through the contours and score them, searching for the best result
         for(MatOfPoint cont : contoursYellow){
             double score = calculateScore(cont); // Get the diffrence score using the scoring API
@@ -88,12 +89,18 @@ public class GoldDetector extends DogeCVDetector {
             Rect rect = Imgproc.boundingRect(cont);
             Imgproc.rectangle(displayMat, rect.tl(), rect.br(), new Scalar(0,0,255),2); // Draw rect
 
+            if(rect.y>bestY){
+                bestYRect=rect;
+                bestY=rect.y;
+            }
             // If the result is better then the previously tracked one, set this rect as the new best
             if(score < bestDiffrence){
                 bestDiffrence = score;
                 bestRect = rect;
             }
         }
+        //selects lowest cube
+        bestRect=bestYRect;
 
         if(bestRect != null){
             // Show chosen result
@@ -105,6 +112,7 @@ public class GoldDetector extends DogeCVDetector {
             found = true;
         }else{
             found = false;
+
         }
 
 

@@ -92,7 +92,7 @@ public class goldTestAuto2land extends OpMode {
 
         leftWheel = hardwareMap.dcMotor.get("leftWheel");
         rightWheel = hardwareMap.dcMotor.get("rightWheel");
-        leftWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -100,8 +100,6 @@ public class goldTestAuto2land extends OpMode {
 
         leftArm = hardwareMap.dcMotor.get("leftArm");
         rightArm = hardwareMap.dcMotor.get("rightArm");
-
-        leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -175,79 +173,69 @@ telemetry.addData("bU","");
                runtime.reset();
                resetDriveEncoders();
            }
-
-            //telemetry.update();
-
         }
-        if(stage==-3.5){
-            telemetry.addLine()
-                    .addData("IsLeftBusy", leftArm.isBusy())
-                    .addData("IsRightBusy", rightArm.isBusy());
-            if (!leftArm.isBusy() && !rightArm.isBusy()) {
-                stage=-3;
-            }
-        }
+
+
+        //moves forward
         if(stage==-3) {
-            rotation = .3;
-            int targetPosition = (int) (rotation * TICKS_PER_WHEEL_ROTATION);
-   //         int delta = targetPosition - Math.abs(rightWheel.getCurrentPosition());
-            //sets speed at which the wheels move and actually sets the wheels' position
-            rightWheel.setTargetPosition(-targetPosition);
-            leftWheel.setTargetPosition(targetPosition-(int)(0.1 * TICKS_PER_WHEEL_ROTATION));
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
-
-//            telemetry.addLine()
-//                    .addData("Current Position: ", rightWheel.getCurrentPosition())
-//                    .addData("Delta", delta);
-            if (!leftWheel.isBusy() && !rightWheel.isBusy() && runtime.seconds()>1) {
+            int targetPosition = (int) (.3 * TICKS_PER_WHEEL_ROTATION);
+            rightWheel.setTargetPosition(targetPosition);
+            leftWheel.setTargetPosition(targetPosition);
+            leftWheel.setPower(1);
+            rightWheel.setPower(1);
+            if (runtime.seconds()>1) {
                 stage=-2.5;
                 leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
                 resetDriveEncoders();
                 runtime.reset();
             }
         }
+        //moves backwards
         if(stage==-2.5){
-            int targetPosition = (int) (.4 * TICKS_PER_WHEEL_ROTATION);
-            rightWheel.setTargetPosition(targetPosition);
-            leftWheel.setTargetPosition(targetPosition);
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
+            rightArm.setPower(0);
+            leftArm.setPower(0);
+            int targetPosition = (int) (.5 * TICKS_PER_WHEEL_ROTATION);
+            rightWheel.setTargetPosition(-targetPosition);
+            leftWheel.setTargetPosition(-targetPosition);
+            leftWheel.setPower(0.7);
+            rightWheel.setPower(0.7);
 
-            if (!leftWheel.isBusy() && !rightWheel.isBusy() && runtime.seconds()>1) {
+            if ( runtime.seconds()>3) {
                 stage=-2.6;
                 leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
                 resetDriveEncoders();
                 runtime.reset();
             }
-
         }
-        if(stage==-2.6){
 
+        //turns
+        if(stage==-2.6){
             int targetPosition = (int) (.3 * TICKS_PER_WHEEL_ROTATION);
             rightWheel.setTargetPosition(targetPosition);
             leftWheel.setTargetPosition(-targetPosition);
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
+            leftWheel.setPower(1);
+            rightWheel.setPower(1);
 
-            if (!leftWheel.isBusy() && !rightWheel.isBusy() && runtime.seconds()>1) {
-                stage=-2.6;
+            if ((!leftWheel.isBusy() && !rightWheel.isBusy() )|| runtime.seconds()>3) {
+                stage=-2;
                 leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
                 resetDriveEncoders();
                 runtime.reset();
             }
         }
         // leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //start vision procedure
         if(stage==-2) {
-            rightArm.setTargetPosition((int) (.105 * TICKS_PER_WHEEL_ROTATION * 8));
-            leftArm.setTargetPosition((int) (.105 * TICKS_PER_WHEEL_ROTATION * 8));
+            rightArm.setTargetPosition((int) (.11 * TICKS_PER_WHEEL_ROTATION * 8));
+            leftArm.setTargetPosition((int) (.11* TICKS_PER_WHEEL_ROTATION * 8));
             rightArm.setPower(.6);
             leftArm.setPower(.6);
             if(runtime.seconds()>4){
                 stage=0;
             }
         }
-
+;
 //        telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
 //        telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
 
@@ -267,22 +255,22 @@ telemetry.addData("bU","");
             telemetry.addData("xpos ", xPos);
             telemetry.addData("amax ", alignXMax);
             telemetry.addData("amin ", alignXMin);
-            if(!(xPos>0)){
+            if(!detector.isFound() ){
                 rightWheel.setPower(0);
                 leftWheel.setPower(0);
                 telemetry.addLine("not detected");
             }
             else if (xPos > alignXMax) {
                 double power = ((xPos - alignXMax) / scale) * .3 + .4;
-                rightWheel.setPower(power);
-                leftWheel.setPower(-power);
+                rightWheel.setPower(-power);
+                leftWheel.setPower(power);
                 telemetry.addData("powL: ", power);
                 telemetry.addLine("turning left");
                 runtime.reset();
             } else if (xPos < alignXMin) {
                 double power = ((alignXMin - xPos) / scale) * .3 + .4;
-                rightWheel.setPower(-power);
-                leftWheel.setPower(power);
+                rightWheel.setPower(power);
+                leftWheel.setPower(-power);
                 telemetry.addData("powR: ", power);
                 telemetry.addLine("turning right");
                 runtime.reset();
@@ -301,8 +289,8 @@ telemetry.addData("bU","");
 
         }
         else if (stage==1){
-            rightWheel.setTargetPosition(-3*TICKS_PER_WHEEL_ROTATION);
-            leftWheel.setTargetPosition(-3*TICKS_PER_WHEEL_ROTATION);
+            rightWheel.setTargetPosition(3*TICKS_PER_WHEEL_ROTATION);
+            leftWheel.setTargetPosition(3*TICKS_PER_WHEEL_ROTATION);
             leftWheel.setPower(.5);
             rightWheel.setPower(.5);
             if(runtime.seconds()>5){
@@ -386,7 +374,6 @@ telemetry.addData("bU","");
 //    }
 
     private void unfold(double finalSetpoint) {
-
         //double setpoint = 0;
 
         rightArm.setPower(0.65);
@@ -400,17 +387,7 @@ telemetry.addData("bU","");
             leftArm.setTargetPosition(-(int) finalSetpoint);
         //}
     }
-
     private void rotate() {
-
-
        // telemetry.update();
     }
-
 }
-
-
-
-
-
-
