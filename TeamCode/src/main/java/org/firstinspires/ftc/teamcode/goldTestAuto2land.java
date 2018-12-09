@@ -64,11 +64,13 @@ public class goldTestAuto2land extends OpMode {
 
 
 
-    double alignSize=40;
+    double alignSize=50;
     double alignX    = (640 / 2) +0; // Center point in X Pixels
     double alignXMin = alignX - (alignSize / 2); // Min X Pos in pixels
     double alignXMax = alignX +(alignSize / 2); // Max X pos in pixels
     double scale = (640-alignSize)/2;
+
+    //NORMALLY -4
     double stage = -4;
 
     boolean aligned = false;
@@ -224,11 +226,11 @@ telemetry.addData("bU","");
             }
         }
         // leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
-
+///////////////////////////////////////////////////////////////ISSUE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //start vision procedure
         if(stage==-2) {
-            rightArm.setTargetPosition((int) (.11 * TICKS_PER_WHEEL_ROTATION * 8));
-            leftArm.setTargetPosition((int) (.11* TICKS_PER_WHEEL_ROTATION * 8));
+            rightArm.setTargetPosition((int) (.114 * TICKS_PER_WHEEL_ROTATION * 8));
+            leftArm.setTargetPosition((int) (.114* TICKS_PER_WHEEL_ROTATION * 8));
             rightArm.setPower(.6);
             leftArm.setPower(.6);
             if(runtime.seconds()>4){
