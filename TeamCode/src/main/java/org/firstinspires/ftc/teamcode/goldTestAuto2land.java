@@ -214,7 +214,7 @@ telemetry.addData("bU","");
         if(stage==-2.6){
             int targetPosition = (int) (.3 * TICKS_PER_WHEEL_ROTATION);
             rightWheel.setTargetPosition(targetPosition);
-            leftWheel.setTargetPosition(-targetPosition);
+            leftWheel.setTargetPosition((int) ( -targetPosition * 1.5));
             leftWheel.setPower(1);
             rightWheel.setPower(1);
 
