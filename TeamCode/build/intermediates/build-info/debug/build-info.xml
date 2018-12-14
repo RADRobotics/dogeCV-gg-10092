@@ -6,29 +6,23 @@
     density="xxhdpi"
     format="10"
     plugin-version="3.1.3"
-    timestamp="1544402190344"
+    timestamp="1544760703971"
     token="-4991714446144001611"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="253" />
+        duration="0" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="82" />
+        duration="0" />
     <task
         name="verifier"
-        duration="21" />
+        duration="0" />
 
-    <artifact
-        location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_2.apk"
-        type="SPLIT" />
-    <artifact
-        location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\instant-run-apk\debug\TeamCode-debug.apk"
-        type="SPLIT_MAIN" />
     <artifact
         location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_9.apk"
         type="SPLIT" />
@@ -37,6 +31,9 @@
         type="SPLIT" />
     <artifact
         location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_3.apk"
+        type="SPLIT" />
+    <artifact
+        location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_2.apk"
         type="SPLIT" />
     <artifact
         location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\dep\dependencies.apk"
@@ -59,17 +56,14 @@
     <artifact
         location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_8.apk"
         type="SPLIT" />
+    <artifact
+        location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\instant-run-apk\debug\TeamCode-debug.apk"
+        type="SPLIT_MAIN" />
 
     <build
         build-mode="FULL"
-        timestamp="1544402190344"
+        timestamp="1544760703971"
         verifier="FULL_BUILD_REQUESTED" >
-        <artifact
-            location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_2.apk"
-            type="SPLIT" />
-        <artifact
-            location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\instant-run-apk\debug\TeamCode-debug.apk"
-            type="SPLIT_MAIN" />
         <artifact
             location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_9.apk"
             type="SPLIT" />
@@ -78,6 +72,9 @@
             type="SPLIT" />
         <artifact
             location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_3.apk"
+            type="SPLIT" />
+        <artifact
+            location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_2.apk"
             type="SPLIT" />
         <artifact
             location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\dep\dependencies.apk"
@@ -100,6 +97,9 @@
         <artifact
             location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\split-apk\debug\slices\slice_8.apk"
             type="SPLIT" />
+        <artifact
+            location="C:\Users\Student\Downloads\dogeCV-gg-10092-master\dogeCV-gg-10092\TeamCode\build\intermediates\instant-run-apk\debug\TeamCode-debug.apk"
+            type="SPLIT_MAIN" />
     </build>
 
 </instant-run>
