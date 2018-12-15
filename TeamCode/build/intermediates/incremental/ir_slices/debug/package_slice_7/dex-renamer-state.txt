@@ -1,4 +1,0 @@
-#Thu Dec 06 20:13:35 PST 2018
-base.0=C\:\\Users\\Student\\Downloads\\dogeCV-gg-10092-master\\dogeCV-gg-10092\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\7
-path.0=classes.dex
-renamed.0=classes.dex
