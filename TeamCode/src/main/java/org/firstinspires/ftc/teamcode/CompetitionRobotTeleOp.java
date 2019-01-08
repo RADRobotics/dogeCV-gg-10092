@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "CompetitionRobotTeleOp", group = "Competition")
+
 public class CompetitionRobotTeleOp extends OpMode {
     private DcMotor leftWheelFront;
     //front top left wheel
@@ -46,21 +48,21 @@ public class CompetitionRobotTeleOp extends OpMode {
         rightLock.setPosition(.8);
         leftLock.setPosition(.2);
 
-        leftWheelFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftWheelBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightWheelFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightWheelBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftWheelFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftWheelBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightWheelFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightWheelBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        leftWheelFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        leftWheelBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightWheelFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightWheelBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        leftWheelFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        leftWheelBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightWheelFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightWheelBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//        leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
     }
@@ -79,8 +81,8 @@ public class CompetitionRobotTeleOp extends OpMode {
         leftWheelFront.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x) * nitro);
 
         //arm extension motors
-        armExtendRight.setPower((-gamepad2.right_stick_y) /* * nitro2*/);
-        armExtendLeft.setPower((gamepad2.right_stick_y)/* * nitro2*/);
+        armExtendRight.setPower((-gamepad2.right_stick_y *0.5) /* * nitro2*/);
+        armExtendLeft.setPower((gamepad2.right_stick_y * 0.5)/* * nitro2*/);
         //arm motors/lock servos
 //        setpoint = /*rightArm.getCurrentPosition()+*/ gamepad2.left_stick_y*125*(nitro2);
         if(gamepad2.a) {
@@ -89,17 +91,17 @@ public class CompetitionRobotTeleOp extends OpMode {
             leftLock.setPosition(.2);
             rightLock.setPosition(.8);
         }
-            else{
+        else{
     //            rightArm.setPower(.6 + nitro*.6);
     //            leftArm.setPower(.6 + nitro*.6);
     //            rightArm.setTargetPosition((int) setpoint);
     //            leftArm.setTargetPosition(-(int) setpoint);
-                rightArm.setPower(-gamepad2.left_stick_y);
-                leftArm.setPower(gamepad2.left_stick_y);
-                //what is the point of setting arm power and changing it right after?
-                leftLock.setPosition(0.8);
-                rightLock.setPosition(.2);
-            }
+            rightArm.setPower(-gamepad2.left_stick_y);
+            leftArm.setPower(gamepad2.left_stick_y);
+            //what is the point of setting arm power and changing it right after?
+            leftLock.setPosition(0.8);
+            rightLock.setPosition(.2);
+        }
 
 
 
