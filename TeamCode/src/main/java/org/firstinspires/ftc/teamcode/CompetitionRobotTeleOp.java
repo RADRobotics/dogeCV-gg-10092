@@ -85,13 +85,13 @@ public class CompetitionRobotTeleOp extends OpMode {
         armExtendLeft.setPower((gamepad2.right_stick_y * 0.5)/* * nitro2*/);
         //arm motors/lock servos
 //        setpoint = /*rightArm.getCurrentPosition()+*/ gamepad2.left_stick_y*125*(nitro2);
-        if(gamepad2.a) {
+        if(gamepad2.a || gamepad1.a) {
             rightArm.setPower(0);
             leftArm.setPower(0);
             leftLock.setPosition(.2);
             rightLock.setPosition(.8);
         }
-        else{
+        if(gamepad2.x || gamepad1.x){
     //            rightArm.setPower(.6 + nitro*.6);
     //            leftArm.setPower(.6 + nitro*.6);
     //            rightArm.setTargetPosition((int) setpoint);
