@@ -18,7 +18,7 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
     private DcMotor leftWheelBack;
     private DcMotor rightWheelFront;
     private DcMotor rightWheelBack;
-    private DcMotor leftArm
+    private DcMotor leftArm;
     private DcMotor rightArm;
     private ColorSensor leftColor;
     private DistanceSensor rightDistance;
@@ -39,12 +39,13 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
         leftWheelFront = hardwareMap.dcMotor.get("leftWheelFront");
         leftWheelBack = hardwareMap.dcMotor.get("leftWheelBack");
         rightWheelFront = hardwareMap.dcMotor.get("rightWheelFront");
-        rightWheelBack = hardwareMap.dcMotor.get("rightWheelBack")
+        rightWheelBack = hardwareMap.dcMotor.get("rightWheelBack");
         leftArm = hardwareMap.dcMotor.get("leftArm");
         rightArm = hardwareMap.dcMotor.get("rightArm");
         rightDistance = hardwareMap.get(DistanceSensor.class, "rightDistance");
         leftColor = hardwareMap.colorSensor.get("leftColor");
-        rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightWheelFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightWheelBack.setDirection(DcMotorSimple.Direction.REVERSE);
         count = 21;
         step = 3;
         subStep = 0;
@@ -73,8 +74,10 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
                     .addData("subStep", subStep)
                     .addData("count", count);
             telemetry.addLine()
-                    .addData("RightWheel: ", rightWheel.getCurrentPosition())
-                    .addData("LeftWheel: ", leftWheel.getCurrentPosition())
+                    .addData("RightWheelFront: ", rightWheelFront.getCurrentPosition())
+                    .addData("RightWheelBack: ", rightWheelBack.getCurrentPosition())
+                    .addData("LeftWheelFront: ", leftWheelFront.getCurrentPosition())
+                    .addData("LeftWheelBack: ", leftWheelBack.getCurrentPosition())
                     .addData("TICKS_PER_WHEEL_ROTATION: ", TICKS_PER_WHEEL_ROTATION);
 
 
@@ -122,12 +125,18 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
     private void resetDriveEncoders() {
         telemetry.addLine("RESET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
                 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        leftWheel.setPower(0);
-        rightWheel.setPower(0);
-        leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftWheelFront.setPower(0);
+        leftWheelBack.setPower(0);
+        rightWheelFront.setPower(0);
+        rightWheelBack.setPower(0);
+        leftWheelFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftWheelBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightWheelFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightWheelBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftWheelFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftWheelBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightWheelFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightWheelBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     }
 
@@ -140,15 +149,20 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
             // turns the robot 90 degrees counter clockwise
             double target = .75;
 
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
+            leftWheelFront.setPower(0.5);
+            leftWheelBack.setPower(0.5);
+            rightWheelFront.setPower(0.5);
+            rightWheelBack.setPower(0.5);
 
-            leftWheel.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
-            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelFront.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelBack.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
 
-            telemetry.addData("delta", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+            telemetry.addData("delta", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelFront.getCurrentPosition())));
+            telemetry.addData("delta", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelBack.getCurrentPosition())));
 
-            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+            if (!leftWheelFront.isBusy() && !leftWheelBack.isBusy() && !rightWheelFront.isBusy() && !rightWheelBack.isBusy()) {
                 subStep += 0.5;
             }
         }
@@ -158,30 +172,42 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
 
             double target = 3;
 
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
+            leftWheelFront.setPower(0.5);
+            leftWheelBack.setPower(0.5);
+            rightWheelFront.setPower(0.5);
+            rightWheelBack.setPower(0.5);
 
-            leftWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
-            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
 
-            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelFront.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelBack.getCurrentPosition())));
 
-            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+
+            if (!leftWheelFront.isBusy() && !leftWheelBack.isBusy() && !rightWheelFront.isBusy() && !rightWheelBack.isBusy()) {
                 subStep += 0.5;
             }
         } else if (subStep == state.MOVE_AWAY_FROM_WALL.ordinal()) {
             // moves the robot backward away from the wall
             double target = -1;
 
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
+            leftWheelFront.setPower(0.5);
+            leftWheelBack.setPower(0.5);
+            rightWheelFront.setPower(0.5);
+            rightWheelBack.setPower(0.5);
 
-            leftWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
-            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
 
-            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelFront.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelBack.getCurrentPosition())));
 
-            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+
+            if (!leftWheelFront.isBusy() && !leftWheelBack.isBusy() && !rightWheelFront.isBusy() && !leftWheelBack.isBusy()) {
                 subStep += 0.5;
 
             }
@@ -189,30 +215,42 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
             // turns the robot counter-clockwise to line up with the depot
             double target = 1;
 
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
+            leftWheelFront.setPower(0.5);
+            leftWheelBack.setPower(0.5);
+            rightWheelFront.setPower(0.5);
+            rightWheelBack.setPower(0.5);
 
-            leftWheel.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
-            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelFront.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelBack.setTargetPosition((int) (-target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
 
-            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelFront.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelBack.getCurrentPosition())));
 
-            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+
+            if (!leftWheelFront.isBusy() && !leftWheelBack.isBusy() && !rightWheelFront.isBusy() && !rightWheelBack.isBusy()) {
                 subStep += 0.5;
             }
         } else if (subStep == state.MOVE_TO_DEPOT.ordinal()) {
             // moves the robot forward up to the depot
             double target = 5;
 
-            leftWheel.setPower(0.5);
-            rightWheel.setPower(0.5);
+            leftWheelFront.setPower(0.5);
+            leftWheelBack.setPower(0.5);
+            rightWheelFront.setPower(0.5);
+            rightWheelBack.setPower(0.5);
 
-            leftWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
-            rightWheel.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            leftWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelFront.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
+            rightWheelBack.setTargetPosition((int) (target * TICKS_PER_WHEEL_ROTATION));
 
-            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheel.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelFront.getCurrentPosition())));
+            telemetry.addData("delta2 ", (target * TICKS_PER_WHEEL_ROTATION - Math.abs(leftWheelBack.getCurrentPosition())));
 
-            if (!leftWheel.isBusy() && !rightWheel.isBusy()) {
+
+            if (!leftWheelFront.isBusy() && !leftWheelBack.isBusy() && !rightWheelFront.isBusy() && !rightWheelBack.isBusy()) {
                 subStep += 0.5;
             }
         }

@@ -45,8 +45,8 @@
 //
 //        nitro  = 0;
 //        nitro2 = 0;
-//        rightLock.setPosition(.8);
-//        leftLock.setPosition(.2);
+//        rightLock.setPosition(.7);
+//        leftLock.setPosition(.3);
 //
 ////        leftWheelFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 ////        leftWheelBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -69,8 +69,8 @@
 //
 //    @Override
 //    public void loop() {
-//        nitro=  1 - (gamepad1.right_trigger *.8);
-//        nitro2=.1 + (gamepad2.right_trigger *.8);
+//        nitro=  1 - (gamepad1.right_trigger *.6);
+//        nitro2=1+(gamepad2.right_trigger);
 //
 //
 //
@@ -81,17 +81,19 @@
 //        leftWheelFront.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x) * nitro);
 //
 //        //arm extension motors
-//        armExtendRight.setPower((-gamepad2.right_stick_y *0.5) /* * nitro2*/);
-//        armExtendLeft.setPower((gamepad2.right_stick_y * 0.5)/* * nitro2*/);
+//        armExtendRight.setPower((-gamepad2.right_stick_y *0.5) *nitro2);
+//        armExtendLeft.setPower((gamepad2.right_stick_y * 0.5)*nitro2);
 //        //arm motors/lock servos
 ////        setpoint = /*rightArm.getCurrentPosition()+*/ gamepad2.left_stick_y*125*(nitro2);
-//        if(gamepad2.a || gamepad1.a) {
+//        if(gamepad2.a) {
 //            rightArm.setPower(0);
 //            leftArm.setPower(0);
-//            leftLock.setPosition(.2);
-//            rightLock.setPosition(.8);
+//            leftLock.setPosition(.3);
+//            rightLock.setPosition(.7);
 //        }
-//        if(gamepad2.x || gamepad1.x){
+//        if(gamepad2.b){
+//            telemetry.addData("hi","brake");
+//            telemetry.update();
 //    //            rightArm.setPower(.6 + nitro*.6);
 //    //            leftArm.setPower(.6 + nitro*.6);
 //    //            rightArm.setTargetPosition((int) setpoint);
@@ -99,17 +101,17 @@
 //            rightArm.setPower(-gamepad2.left_stick_y);
 //            leftArm.setPower(gamepad2.left_stick_y);
 //            //what is the point of setting arm power and changing it right after?
-//            leftLock.setPosition(0.8);
-//            rightLock.setPosition(.2);
+//            leftLock.setPosition(0.7);
+//            rightLock.setPosition(.3);
 //        }
-//
-//
-//
-//
-//
-//       // leftLock.setPosition(gamepad1.right_stick_y);
-//        //rightLock.setPosition(gamepad1.left_stick_x);
+
+
+
+
+
+       // leftLock.setPosition(gamepad1.right_stick_y);
+        //rightLock.setPosition(gamepad1.left_stick_x);
 //    }
 //}
-//
-//
+
+

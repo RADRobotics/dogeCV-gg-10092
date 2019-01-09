@@ -117,7 +117,7 @@ public class SampleFieldAutonomous extends LinearOpMode {
         }
     }
 
-    private void resetDriveEncoders() {
+    private void resetDriveEncoders()  {
         telemetry.addLine("RESET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
                 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         leftWheel.setPower(0);
