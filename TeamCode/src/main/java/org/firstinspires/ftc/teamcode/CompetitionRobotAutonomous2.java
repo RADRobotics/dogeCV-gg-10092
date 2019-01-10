@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //dab
-@Autonomous(name = "CompetitionRobotAuto", group = "Prototyping")
-@Disabled
-public class CompetitionRobotAutonomous extends LinearOpMode {
+@Autonomous(name = "CompetitionRobotAuto2", group = "Prototyping")
+
+public class CompetitionRobotAutonomous2 extends LinearOpMode {
 
     //defines the various motors, Sensors, and variables in the robot
     private Servo rightLock;
@@ -24,14 +24,10 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
     private DcMotor rightWheelBack;
     private DcMotor leftArm;
     private DcMotor rightArm;
-    private ColorSensor leftColor;
-    private DistanceSensor rightDistance;
-    private int count;
-    private boolean sample_ready;
-    private boolean lander_unlatched;
+    int subStep=0;
     private int step;
     private final double TICKS_PER_WHEEL_ROTATION = 1120;
-    private double subStep;
+
 
     private enum state {TURN_TO_WALL, MOVE_TO_WALL, MOVE_AWAY_FROM_WALL, TURN_TO_DEPOT, MOVE_TO_DEPOT}
 
@@ -47,16 +43,11 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
         rightWheelBack = hardwareMap.dcMotor.get("rightWheelBack");
         leftArm = hardwareMap.dcMotor.get("leftArm");
         rightArm = hardwareMap.dcMotor.get("rightArm");
-        rightDistance = hardwareMap.get(DistanceSensor.class, "rightDistance");
-        leftColor = hardwareMap.colorSensor.get("leftColor");
         rightWheelFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightWheelBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        count = 21;
-        step = 0;
-        subStep = 0;
 
-        sample_ready = false;
-        lander_unlatched = false;
+        step = 0;
+
 
         //prepares and resets robot by resetting encoders
         resetDriveEncoders();
@@ -69,15 +60,13 @@ public class CompetitionRobotAutonomous extends LinearOpMode {
 
         //Sends color sensor input values to the phone
         waitForStart();
-
+        rightArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while (opModeIsActive()) {
             telemetry.update();
 
 
             telemetry.addLine()
-                    .addData("step", step)
-                    .addData("subStep", subStep)
-                    .addData("count", count);
+                    .addData("step", step);
             telemetry.addLine()
                     .addData("RightWheelFront: ", rightWheelFront.getCurrentPosition())
                     .addData("RightWheelBack: ", rightWheelBack.getCurrentPosition())
