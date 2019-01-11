@@ -76,10 +76,10 @@ public class CompetitionRobotTeleOp extends OpMode {
 
 
         //drive motors
-        rightWheelFront.setPower((-gamepad1.left_stick_y - gamepad1.right_stick_x) * nitro1);
-        rightWheelBack.setPower((-gamepad1.left_stick_y - gamepad1.right_stick_x) * nitro1);
-        leftWheelBack.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x) * nitro1);
-        leftWheelFront.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x) * nitro1);
+        rightWheelFront.setPower((-gamepad1.left_stick_y + gamepad1.right_stick_x) * nitro1);
+        rightWheelBack.setPower((-gamepad1.left_stick_y + gamepad1.right_stick_x) * nitro1);
+        leftWheelBack.setPower((gamepad1.left_stick_y + gamepad1.right_stick_x) * nitro1);
+        leftWheelFront.setPower((gamepad1.left_stick_y + gamepad1.right_stick_x) * nitro1);
 
         //arm extension motors
         armExtendRight.setPower(.5*(-gamepad2.right_stick_y) *nitro2*(1-(gamepad2.left_trigger*.8)));
@@ -94,7 +94,7 @@ public class CompetitionRobotTeleOp extends OpMode {
             isLocked = false;
         }
         if (isLocked) {
-            if (gamepad2.left_stick_y > 0) {
+            if (gamepad2.left_stick_y < 0) {
                 rightArm.setPower(.5*-gamepad2.left_stick_y*nitro2*(1-(gamepad2.left_trigger*.8)));
                 leftArm.setPower(.5*gamepad2.left_stick_y*nitro2*(1-(gamepad2.left_trigger*.8)));
             }
@@ -102,17 +102,15 @@ public class CompetitionRobotTeleOp extends OpMode {
                 rightArm.setPower(0);
                 leftArm.setPower(0);
             }
-            leftLock.setPosition(.4);
-            rightLock.setPosition(.6);
+            leftLock.setPosition(.25);
+            rightLock.setPosition(.45);
         }
             else {
-            telemetry.addData("hi", "brake");
-            telemetry.update();
             rightArm.setPower(.5*-gamepad2.left_stick_y*nitro2*(1-(gamepad2.left_trigger*.8)));
             leftArm.setPower(.5*gamepad2.left_stick_y*nitro2*(1-(gamepad2.left_trigger*.8)));
 
-            leftLock.setPosition(0.6);
-            rightLock.setPosition(.4);
+            leftLock.setPosition(0.5);
+            rightLock.setPosition(.3);
         }
 
 
